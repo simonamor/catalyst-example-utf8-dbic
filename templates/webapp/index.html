@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UTF8 Database test</title>
+
+</head>
+<body>
+
+<h1>Current data</h1>
+
+<ul>
+[% FOREACH record IN records -%]
+<li>[% loop.count; " - "; record.string | html_entity %]</li>
+[% END %]
+</ul>
+
+<h1>Add new data</h1>
+
+<form method="POST" action="/">
+<input type="text" name="string">
+<input type="submit" value="Add record">
+</form>
+
+</body>
+</html>
