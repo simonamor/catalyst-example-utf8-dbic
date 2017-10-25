@@ -7,6 +7,8 @@ use strict;
 use warnings;
 use Encode qw(is_utf8);
 
+use Data::Dumper;
+
 BEGIN { extends 'Catalyst::Controller' }
 
 #
@@ -43,11 +45,7 @@ sub index :Path :Args(0) {
     $c->stash( quebec => 'Québec' );
 
     if (my $new_string = $c->request->params->{ string }) {
-
-        $new_string = $c->stash->{ quebec };
-
-        $c->log->debug( "is_utf8? " . (is_utf8($new_string) ? "true" : "false") . " byte seq: " . join ", ", map { sprintf("%2.2x", ord($_)) } split //, $new_string );
-
+        $c->log->debug( "String: " . Dumper($new_string));
         $records->create({ string => $new_string });
         $c->response->redirect( $c->uri_for("/") );
         $c->detach();
