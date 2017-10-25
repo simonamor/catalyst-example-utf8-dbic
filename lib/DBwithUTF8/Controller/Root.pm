@@ -32,6 +32,17 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
     $c->stash( template => "index.html" );
+
+    my $records = $c->model('DB::Record');
+
+    if (my $new_string = $c->request->params->{ string }) {
+        $records->create({ string => $new_string });
+        $c->response->redirect( $c->uri_for("/") );
+        $c->detach();
+    }
+
+    $c->stash( records => [ $records->all ] );
+
 }
 
 =head2 default

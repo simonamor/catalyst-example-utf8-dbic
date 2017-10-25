@@ -10,7 +10,7 @@
 
 <ul>
 [% FOREACH record IN records -%]
-<li>[% loop.count; " - "; record.string | html_entity %]</li>
+<li>[% record.record_id; " - "; record.string | html_entity %]</li>
 [% END %]
 </ul>
 
