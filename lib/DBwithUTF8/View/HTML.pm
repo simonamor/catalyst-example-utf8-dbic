@@ -11,6 +11,8 @@ __PACKAGE__->config(
     INCLUDE_PATH => [
         DBwithUTF8->path_to( 'templates', 'webapp' ),
     ],
+
+    ENCODING     => 'utf8',
 );
 
 =head1 NAME

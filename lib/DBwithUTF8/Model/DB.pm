@@ -10,7 +10,12 @@ __PACKAGE__->config(
         dsn => 'dbi:mysql:utf8db',
         user => 'utf8db_user',
         password => 'utf8db_pass',
-    }
+        mysql_enable_utf8 => 1,
+    },
+
+#    on_connect_do => [
+#        'SET NAMES utf8'
+#    ],
 );
 
 =head1 NAME

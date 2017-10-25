@@ -1,6 +1,11 @@
+use utf8;
 package DBwithUTF8::Controller::Root;
 use Moose;
 use namespace::autoclean;
+
+use strict;
+use warnings;
+use Encode qw(is_utf8);
 
 BEGIN { extends 'Catalyst::Controller' }
 
@@ -35,7 +40,14 @@ sub index :Path :Args(0) {
 
     my $records = $c->model('DB::Record');
 
+    $c->stash( quebec => 'Québec' );
+
     if (my $new_string = $c->request->params->{ string }) {
+
+        $new_string = $c->stash->{ quebec };
+
+        $c->log->debug( "is_utf8? " . (is_utf8($new_string) ? "true" : "false") . " byte seq: " . join ", ", map { sprintf("%2.2x", ord($_)) } split //, $new_string );
+
         $records->create({ string => $new_string });
         $c->response->redirect( $c->uri_for("/") );
         $c->detach();
