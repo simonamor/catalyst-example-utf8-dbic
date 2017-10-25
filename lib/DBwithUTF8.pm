@@ -24,6 +24,11 @@ use Catalyst qw/
 
 extends 'Catalyst';
 
+use strict;
+use warnings;
+
+use DBIx::Class::DeploymentHandler;
+
 our $VERSION = '0.01';
 
 # Configure the application.
@@ -46,6 +51,30 @@ __PACKAGE__->config(
 
 # Start the application
 __PACKAGE__->setup();
+
+1;
+
+my $model = __PACKAGE__->model('DB');
+my $dh = DBIx::Class::DeploymentHandler->new({
+    schema => $model->schema,
+    force_overwrite => 0,
+    script_directory => __PACKAGE__->path_to("ddl")->stringify,
+    databases => [ $model->schema->storage->sqlt_type ],
+});
+if ($dh->version_storage_is_installed) {
+    warn "version storage is installed - we should call upgrade()\n";
+    my $ret = eval {
+        $dh->upgrade();
+    };
+    die "upgrade failed: $@\n" if $@;
+} else {
+    warn "version storage is not installed - we should call install()\n";
+    my $ret = eval {
+        $dh->install();
+    };
+    die "install failed: $@\n" if $@;
+}
+
 
 =encoding utf8
 
